@@ -10,28 +10,29 @@ jobs:
     runs-on: macos-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
-        python-version: '3.10' 
+        python-version: '3.10'
 
     - name: Install Dependencies
       run: |
-        pip install -r requirements.txt
+        python -m pip install --upgrade pip
+        pip install customtkinter pandas numpy matplotlib seaborn openpyxl pyinstaller
 
     - name: Build with PyInstaller
       run: |
-        pyinstaller --noconfirm --onefile --windowed --name "Lynch Lab MedPC Analyzer" --collect-all customtkinter medpc_app.py
+        python -m PyInstaller --noconfirm --onefile --windowed --name "Lynch_Lab_Analyzer" --collect-all customtkinter medpc_app.py
 
     - name: Zip the App
       run: |
         cd dist
-        zip -r "Lynch_Lab_MedPC_Analyzer_Mac.zip" "Lynch Lab MedPC Analyzer.app"
+        zip -r "Lynch_Lab_Mac.zip" "Lynch_Lab_Analyzer.app"
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
         name: Mac-App-Bundle
-        path: dist/Lynch_Lab_MedPC_Analyzer_Mac.zip
+        path: dist/Lynch_Lab_Mac.zip
